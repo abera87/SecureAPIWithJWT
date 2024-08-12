@@ -6,8 +6,8 @@
 
 \
 ![Auth Flow](AuthFlow.jpg)
-### in this repo services are connectd like below
-
+### In this repo services are connectd like below
+![Secure API with JWT](SecureAPIWithJWT.drawio.png)
 
 ### Reference 
 https://www.c-sharpcorner.com/article/jwt-token-creation-authentication-and-authorization-in-asp-net-core-6-0-with-po/ \
