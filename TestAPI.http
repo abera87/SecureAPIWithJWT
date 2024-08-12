@@ -1,0 +1,47 @@
+@UserServiceBaseUrl = http://localhost:5207
+@ProductServiceBaseUrl = http://localhost:5002
+@InventoryServiceBaseUrl = http://localhost:5033
+
+@userEmail = abc.com
+@access_token = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IkFuaW1lc2gtMSIsIm5hbWVpZCI6IkFuaW1lc2gtMSIsImVtYWlsIjoiYWJjLmNvbSIsImF1ZCI6InJlYWQgd3JpdGUgZGVsZXRlIiwibmJmIjoxNzIzNDQ0OTMyLCJleHAiOjE3MjM0NDU4MzIsImlhdCI6MTcyMzQ0NDkzMiwiaXNzIjoiaHR0cHM6Ly9NeU93bklzc3VlLmNvbS8ifQ.nIrogyUxMr7Qhax_QvCMvsSNhYcpb2XKKyi-odZoW8-Py4bsIrD0c6ZifzabrPFwD3LBPf9A-ueUARiqisawXuFKJgNjXdhvxFHdhl4yYNjZ3Zjcul4n0n6Vt3YGkj41gXotHPP6RHxsDVkvHTtK1ROVnSxtDkOQqIVzLLyOYakkv9NOUm800Ojf528YWvcr5gNE8kZeoQcCsoHESka15aVCl5eBt7EdyhKDCKUiSYaQnJDO22aoRNWGi2GqV6XDGZwJ3PeUXiKK9zjkgzK1xpmkoijVILeaDtPC2z7fV-06JtQwGhN-hnOJooqtOLNHnqFEanpmVRVg5wYrTky_7g
+
+
+### get metadata
+GET {{UserServiceBaseUrl}}/api/issuer/metadata
+### get metadata for RSA
+GET {{UserServiceBaseUrl}}/api/issuer/metadata?algo=RSA
+
+
+### register user
+POST {{UserServiceBaseUrl}}/api/user/register
+Content-Type: application/json
+
+{
+  "Name": "Animesh-1",
+  "Email": "{{userEmail}}",
+  "Password": "A@123",
+  "Audiences": ["read","write","delete"]
+}
+
+### get user
+GET {{UserServiceBaseUrl}}/api/user/{{userEmail}}
+
+### get token
+POST {{UserServiceBaseUrl}}/api/user/token
+Content-Type: application/json
+
+"abc.com"
+
+### get rsa token
+POST {{UserServiceBaseUrl}}/api/user/rsatoken
+Content-Type: application/json
+
+"abc.com"
+
+### call product service
+GET {{ProductServiceBaseUrl}}/api/products
+Authorization: bearer {{access_token}}
+
+### call inventory service
+GET {{InventoryServiceBaseUrl}}/api/inventory
+Authorization: bearer {{access_token}}
