@@ -1,0 +1,86 @@
+@userEmail = abc.com
+@access_token = token
+
+
+
+### get metadata
+GET {{UserServiceBaseUrl}}/api/issuer/metadata
+
+> {%
+// Assert status code
+client.test('status code 200', () => {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.assert(CheckKeyLength(response.body.key), "Not a valid key");
+});
+client.test('check key', () => {
+  client.assert(CheckKeyLength(response.body.key), "Not a valid key");
+});
+
+ //client.global.set("access_token",response.body.key);
+
+function CheckKeyLength(data){
+  return data.length>0;
+}
+%}
+
+{{
+  exports.access_token=response.parsedBody.key;
+}}
+
+### get metadata for RSA
+GET {{UserServiceBaseUrl}}/api/issuer/metadata?algo=RSA
+
+
+### register user
+POST {{UserServiceBaseUrl}}/api/user/register
+Content-Type: application/json
+
+{
+  "Name": "Animesh-1",
+  "Email": "{{userEmail}}",
+  "Password": "A@123",
+  "Audiences": ["read","write","delete"]
+}
+
+?? status == 200
+### get user
+GET {{UserServiceBaseUrl}}/api/user/{{userEmail}}
+
+### get token
+POST {{UserServiceBaseUrl}}/api/user/token
+Content-Type: application/json
+
+"abc.com"
+
+### get rsa token
+POST {{UserServiceBaseUrl}}/api/user/rsatoken
+Content-Type: application/json
+
+"abc.com"
+
+{{
+  exports.access_token=response.body;
+}}
+// either below code or next code
+////> {%
+////  client.global.set("access_token",response.body);
+////%}
+### call product service
+GET {{ProductServiceBaseUrl}}/api/products
+Authorization: bearer {{access_token}}
+> {%
+// Assert status code
+client.test('status code 200', () => {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### call inventory service
+GET {{InventoryServiceBaseUrl}}/api/inventory
+Authorization: bearer {{access_token}}
+> {%
+// Assert status code
+client.test('status code 200', () => {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
